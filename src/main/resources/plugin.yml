@@ -1,0 +1,7 @@
+name: SimpleChatLiteracy
+version: 1.0.0
+main: org.devcloud.simplechatliteracy.SimpleChatLiteracy
+description: Simple addon-plugin chat plugin for your server.
+author: BrainRTP
+website: https://www.spigotmc.org/resources/64815/
+api-version: '1.20'
