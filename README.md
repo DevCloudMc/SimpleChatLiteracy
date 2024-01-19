@@ -1,4 +1,4 @@
-![License](https://img.shields.io/badge/License-MIT-blue)
+![License](https://img.shields.io/badge/License-MIT-blue) [![CodeFactor](https://www.codefactor.io/repository/github/devcloudmc/simplechatliteracy/badge)](https://www.codefactor.io/repository/github/devcloudmc/simplechatliteracy)
 ![Version](https://img.shields.io/badge/version-1.0.0--SNAPSHOT-g)  
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=DevCloudMc_SimpleChatLiteracy&metric=alert_status)](https://sonarcloud.io/dashboard?id=com.djrapitops%3APlan)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=DevCloudMc_SimpleChatLiteracy&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=DevCloudMc_SimpleChatLiteracy)
