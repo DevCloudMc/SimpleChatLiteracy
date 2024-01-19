@@ -1,4 +1,4 @@
-![License](https://img.shields.io/badge/License-MIT-blue)
+![License](https://img.shields.io/badge/License-MIT-blue) [![CodeFactor](https://www.codefactor.io/repository/github/devcloudmc/simplechatliteracy/badge)](https://www.codefactor.io/repository/github/devcloudmc/simplechatliteracy)
 ![Version](https://img.shields.io/badge/version-1.0.0--SNAPSHOT-g)  
 ![Discord](https://img.shields.io/discord/656092798138843146?logo=discord&logoColor=white&label=Chat%20support&color=blue)  
 ![Java](https://img.shields.io/badge/Java_version-17-1?logo=openjdk&logoColor=white&label=Java%20version&color=blue)
