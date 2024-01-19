@@ -1,5 +1,8 @@
 ![License](https://img.shields.io/badge/License-MIT-blue)
 ![Version](https://img.shields.io/badge/version-1.0.0--SNAPSHOT-g)  
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=DevCloudMc_SimpleChatLiteracy&metric=alert_status)](https://sonarcloud.io/dashboard?id=com.djrapitops%3APlan)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=DevCloudMc_SimpleChatLiteracy&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=DevCloudMc_SimpleChatLiteracy)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=DevCloudMc_SimpleChatLiteracy&metric=coverage)](https://sonarcloud.io/summary/new_code?id=DevCloudMc_SimpleChatLiteracy)  
 ![Discord](https://img.shields.io/discord/656092798138843146?logo=discord&logoColor=white&label=Chat%20support&color=blue)  
 ![Java](https://img.shields.io/badge/Java_version-17-1?logo=openjdk&logoColor=white&label=Java%20version&color=blue)
 
