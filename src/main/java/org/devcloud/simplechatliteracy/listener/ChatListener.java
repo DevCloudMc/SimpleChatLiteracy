@@ -55,9 +55,11 @@ public class ChatListener implements Listener {
         boolean canEditEnd = components.get(last) instanceof TextComponent;
 
         if (canEditStart && messageContent.startsWith("./")) {
-            messageContent = messageContent.substring(1);
             TextComponent textComponent = (TextComponent) components.get(first);
             components.set(first, textComponent.content(textComponent.content().substring(1)));
+            Iterator<Component> replacements = components.iterator();
+            event.message(replacements.next().toBuilder().mapChildrenDeep(child -> replacements.next()).build());
+            return;
         }
 
         boolean isSplit = messageContent.split(" ").length >= 2;
