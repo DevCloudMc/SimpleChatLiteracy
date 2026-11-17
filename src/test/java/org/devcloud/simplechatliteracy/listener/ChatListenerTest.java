@@ -101,6 +101,17 @@ class ChatListenerTest {
     }
 
     @Test
+    void preservesSurrogatePairAcrossNodes() {
+        Component message = Component.text("\uD801").append(Component.text("\uDC28 hello"));
+        AsyncChatEvent event = chatEvent(message, message);
+
+        listener.onAsyncChat(event);
+
+        assertEquals(Component.text("\uD801").append(Component.text("\uDC28 hello.")), event.message());
+        assertEquals("𐐨 hello.", PlainTextComponentSerializer.plainText().serialize(event.message()));
+    }
+
+    @Test
     void formatsNestedBranchBeforeSibling() {
         Component message = Component.text("пр").append(Component.text("ивет ").append(Component.text("ми").append(Component.text("р")))).append(Component.text(" друг"));
         AsyncChatEvent event = chatEvent(message, message);

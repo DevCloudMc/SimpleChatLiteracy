@@ -13,7 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class ChatListener implements Listener {
-    private static final String SPECIAL_CHARACTERS = "*[.|?!-+,()><;:_^]…。．｡！？؟‼⁇⁈⁉";
+    private static final String SPECIAL_CHARACTERS = "*[.|?!-+,()><;:_^]…。．｡！？؟۔‼⁇⁈⁉";
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onAsyncChat(AsyncChatEvent event) {
@@ -62,10 +62,9 @@ public class ChatListener implements Listener {
         }
 
         String strippedContent = messageContent.strip();
-        int firstCharacter = strippedContent.codePointAt(0);
         boolean isSplit = strippedContent.split("\\p{javaWhitespace}+").length >= 2;
         boolean isLastCharacterSpecial = SPECIAL_CHARACTERS.indexOf(strippedContent.codePointBefore(strippedContent.length())) >= 0;
-        boolean isFirstCharacterSpecial = SPECIAL_CHARACTERS.indexOf(firstCharacter) >= 0;
+        boolean isFirstCharacterSpecial = SPECIAL_CHARACTERS.indexOf(strippedContent.codePointAt(0)) >= 0;
 
         if (canEditStart && canEditEnd && isSplit && !isLastCharacterSpecial && !isFirstCharacterSpecial) {
             TextComponent textComponent = (TextComponent) components.get(last);
@@ -74,14 +73,17 @@ public class ChatListener implements Listener {
             components.set(last, textComponent.content(lastContent.substring(0, end) + "." + lastContent.substring(end)));
         }
 
-        if (canEditStart && Character.isLowerCase(firstCharacter)) {
+        if (canEditStart) {
             TextComponent textComponent = (TextComponent) components.get(first);
             String firstContent = textComponent.content();
             int start = firstContent.length() - firstContent.stripLeading().length();
-            StringBuilder capitalizedContent = new StringBuilder(firstContent.substring(0, start));
-            capitalizedContent.appendCodePoint(Character.toUpperCase(firstCharacter));
-            capitalizedContent.append(firstContent.substring(start + Character.charCount(firstCharacter)));
-            components.set(first, textComponent.content(capitalizedContent.toString()));
+            int firstCharacter = firstContent.codePointAt(start);
+            if (Character.isLowerCase(firstCharacter)) {
+                StringBuilder capitalizedContent = new StringBuilder(firstContent.substring(0, start));
+                capitalizedContent.appendCodePoint(Character.toUpperCase(firstCharacter));
+                capitalizedContent.append(firstContent.substring(start + Character.charCount(firstCharacter)));
+                components.set(first, textComponent.content(capitalizedContent.toString()));
+            }
         }
 
         rebuildMessage(event, components);
