@@ -1,5 +1,5 @@
 name: SimpleChatLiteracy
-version: 1.0.0
+version: '${version}'
 main: org.devcloud.simplechatliteracy.SimpleChatLiteracy
 description: Simple addon-plugin chat plugin for your server.
 author: BrainRTP

@@ -1,5 +1,5 @@
 ![License](https://img.shields.io/badge/License-MIT-blue) [![CodeFactor](https://www.codefactor.io/repository/github/devcloudmc/simplechatliteracy/badge)](https://www.codefactor.io/repository/github/devcloudmc/simplechatliteracy)
-![Version](https://img.shields.io/badge/version-1.0.0--SNAPSHOT-g)  
+![Version](https://img.shields.io/badge/version-2.0.0-g)  
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=DevCloudMc_SimpleChatLiteracy&metric=alert_status)](https://sonarcloud.io/dashboard?id=com.djrapitops%3APlan)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=DevCloudMc_SimpleChatLiteracy&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=DevCloudMc_SimpleChatLiteracy)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=DevCloudMc_SimpleChatLiteracy&metric=coverage)](https://sonarcloud.io/summary/new_code?id=DevCloudMc_SimpleChatLiteracy)  
@@ -12,11 +12,13 @@ Simple addon-plugin chat plugin for your server.
 
 Features:
 1) Set first character in upper case.
-2) Add full stop (dot) to the end of a sentence.
+2) Add a full stop to messages of two or more words that do not already end with a punctuation mark.
 3) Remove dot when you put it before the command.
 4) No config.
 
 ## Installation
+Requires Paper 26.3 or newer running on Java 25. Spigot and CraftBukkit are not supported.
+
 1) Download the latest version from [Spigot page](https://www.spigotmc.org/resources/64815/)
 2) Put it into your plugins folder
 3) Restart the server
