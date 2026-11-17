@@ -25,6 +25,16 @@ class ChatListenerTest {
     @CsvSource({
             "badword here, [removed], [removed]",
             "привет мир, привет мир, Привет мир.",
+            "привет, привет, Привет",
+            "'привет мир ', 'привет мир ', 'Привет мир. '",
+            "'привет\tмир', 'привет\tмир', 'Привет\tмир.'",
+            "'  ', '  ', '  '",
+            "'', '', ''",
+            "'  привет мир  ', '  привет мир  ', '  Привет мир.  '",
+            "'  *привет мир', '  *привет мир', '  *привет мир'",
+            "привет мир…, привет мир…, Привет мир…",
+            "你好 世界！, 你好 世界！, 你好 世界！",
+            "𐐨 hello, 𐐨 hello, 𐐀 hello.",
             "./tell Bob https://example.org/A?key=AbC, ./tell Bob https://example.org/A?key=AbC, /tell Bob https://example.org/A?key=AbC",
             "./, ./, /"
     })
@@ -69,6 +79,16 @@ class ChatListenerTest {
     }
 
     @Test
+    void insertsPeriodBeforeWhitespaceChild() {
+        Component message = Component.text("привет мир", NamedTextColor.RED).append(Component.text(" "));
+        AsyncChatEvent event = chatEvent(message, message);
+
+        listener.onAsyncChat(event);
+
+        assertEquals(Component.text("Привет мир.", NamedTextColor.RED).append(Component.text(" ")), event.message());
+    }
+
+    @Test
     void editsDifferentNodesAndPreservesChildEvent() {
         TextComponent child = Component.text("мир", NamedTextColor.RED).clickEvent(ClickEvent.runCommand("/example"));
         Component message = Component.text("привет ").append(child);
@@ -78,6 +98,17 @@ class ChatListenerTest {
 
         assertEquals("Привет мир.", PlainTextComponentSerializer.plainText().serialize(event.message()));
         assertEquals(Component.text("Привет ").append(child.content("мир.")), event.message());
+    }
+
+    @Test
+    void preservesSurrogatePairAcrossNodes() {
+        Component message = Component.text("\uD801").append(Component.text("\uDC28 hello"));
+        AsyncChatEvent event = chatEvent(message, message);
+
+        listener.onAsyncChat(event);
+
+        assertEquals(Component.text("\uD801").append(Component.text("\uDC28 hello.")), event.message());
+        assertEquals("𐐨 hello.", PlainTextComponentSerializer.plainText().serialize(event.message()));
     }
 
     @Test

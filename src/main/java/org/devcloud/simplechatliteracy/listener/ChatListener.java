@@ -13,7 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class ChatListener implements Listener {
-    private static final String SPECIAL_CHARACTERS = "*[.|?!-+,()><;:_^]";
+    private static final String SPECIAL_CHARACTERS = "*[.|?!-+,()><;:_^]…。．｡！？؟۔‼⁇⁈⁉";
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onAsyncChat(AsyncChatEvent event) {
@@ -35,7 +35,7 @@ public class ChatListener implements Listener {
             components.add(component);
             if (component instanceof TextComponent textComponent) {
                 content.append(textComponent.content());
-                if (textComponent.content().isEmpty()) {
+                if (textComponent.content().isBlank()) {
                     continue;
                 }
             }
@@ -46,37 +46,50 @@ public class ChatListener implements Listener {
             last = components.size() - 1;
         }
 
-        if (content.isEmpty()) {
+        String messageContent = content.toString();
+        if (messageContent.isBlank()) {
             return;
         }
 
-        String messageContent = content.toString();
         boolean canEditStart = components.get(first) instanceof TextComponent;
         boolean canEditEnd = components.get(last) instanceof TextComponent;
 
         if (canEditStart && messageContent.startsWith("./")) {
             TextComponent textComponent = (TextComponent) components.get(first);
             components.set(first, textComponent.content(textComponent.content().substring(1)));
-            Iterator<Component> replacements = components.iterator();
-            event.message(replacements.next().toBuilder().mapChildrenDeep(child -> replacements.next()).build());
+            rebuildMessage(event, components);
             return;
         }
 
-        boolean isSplit = messageContent.split(" ").length >= 2;
-        boolean isLastCharacterSpecial = SPECIAL_CHARACTERS.contains(String.valueOf(messageContent.charAt(messageContent.length() - 1)));
-        boolean isFirstCharacterSpecial = SPECIAL_CHARACTERS.contains(String.valueOf(messageContent.charAt(0)));
+        String strippedContent = messageContent.strip();
+        boolean isSplit = strippedContent.split("\\p{javaWhitespace}+").length >= 2;
+        boolean isLastCharacterSpecial = SPECIAL_CHARACTERS.indexOf(strippedContent.codePointBefore(strippedContent.length())) >= 0;
+        boolean isFirstCharacterSpecial = SPECIAL_CHARACTERS.indexOf(strippedContent.codePointAt(0)) >= 0;
 
         if (canEditStart && canEditEnd && isSplit && !isLastCharacterSpecial && !isFirstCharacterSpecial) {
             TextComponent textComponent = (TextComponent) components.get(last);
-            components.set(last, textComponent.content(textComponent.content() + "."));
+            String lastContent = textComponent.content();
+            int end = lastContent.stripTrailing().length();
+            components.set(last, textComponent.content(lastContent.substring(0, end) + "." + lastContent.substring(end)));
         }
 
-        if (canEditStart && Character.isLowerCase(messageContent.charAt(0))) {
+        if (canEditStart) {
             TextComponent textComponent = (TextComponent) components.get(first);
             String firstContent = textComponent.content();
-            components.set(first, textComponent.content(Character.toUpperCase(firstContent.charAt(0)) + firstContent.substring(1)));
+            int start = firstContent.length() - firstContent.stripLeading().length();
+            int firstCharacter = firstContent.codePointAt(start);
+            if (Character.isLowerCase(firstCharacter)) {
+                StringBuilder capitalizedContent = new StringBuilder(firstContent.substring(0, start));
+                capitalizedContent.appendCodePoint(Character.toUpperCase(firstCharacter));
+                capitalizedContent.append(firstContent.substring(start + Character.charCount(firstCharacter)));
+                components.set(first, textComponent.content(capitalizedContent.toString()));
+            }
         }
 
+        rebuildMessage(event, components);
+    }
+
+    private void rebuildMessage(AsyncChatEvent event, List<Component> components) {
         Iterator<Component> replacements = components.iterator();
         event.message(replacements.next().toBuilder().mapChildrenDeep(child -> replacements.next()).build());
     }
