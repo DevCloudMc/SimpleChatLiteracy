@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "org.devcloud.simplechatliteracy"
-version = "1.0-SNAPSHOT"
+version = "2.0.0"
 
 repositories {
     mavenCentral()
@@ -27,6 +27,14 @@ java {
 
 tasks.withType<JavaCompile>().configureEach {
     options.release.set(25)
+}
+
+tasks.processResources {
+    val pluginVersion = version.toString()
+    inputs.property("version", pluginVersion)
+    filesMatching("plugin.yml") {
+        expand("version" to pluginVersion)
+    }
 }
 
 tasks.test {
