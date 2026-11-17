@@ -24,7 +24,9 @@ class ChatListenerTest {
     @ParameterizedTest
     @CsvSource({
             "badword here, [removed], [removed]",
-            "привет мир, привет мир, Привет мир."
+            "привет мир, привет мир, Привет мир.",
+            "./tell Bob https://example.org/A?key=AbC, ./tell Bob https://example.org/A?key=AbC, /tell Bob https://example.org/A?key=AbC",
+            "./, ./, /"
     })
     void formatsCurrentMessage(String originalMessage, String currentMessage, String expected) {
         AsyncChatEvent event = chatEvent(Component.text(originalMessage), Component.text(currentMessage));
@@ -76,6 +78,17 @@ class ChatListenerTest {
 
         assertEquals("Привет мир.", PlainTextComponentSerializer.plainText().serialize(event.message()));
         assertEquals(Component.text("Привет ").append(child.content("мир.")), event.message());
+    }
+
+    @Test
+    void formatsNestedBranchBeforeSibling() {
+        Component message = Component.text("пр").append(Component.text("ивет ").append(Component.text("ми").append(Component.text("р")))).append(Component.text(" друг"));
+        AsyncChatEvent event = chatEvent(message, message);
+
+        listener.onAsyncChat(event);
+
+        assertEquals("Привет мир друг.", PlainTextComponentSerializer.plainText().serialize(event.message()));
+        assertEquals(Component.text("Пр").append(Component.text("ивет ").append(Component.text("ми").append(Component.text("р")))).append(Component.text(" друг.")), event.message());
     }
 
     @Test
