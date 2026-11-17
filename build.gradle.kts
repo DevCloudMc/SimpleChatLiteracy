@@ -18,6 +18,7 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     compileOnly("io.papermc.paper:paper-api:26.3.build.253-stable")
+    testImplementation("io.papermc.paper:paper-api:26.3.build.253-stable")
 }
 
 java {
