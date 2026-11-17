@@ -20,8 +20,8 @@ public class ChatListener implements Listener {
     }
 
     private void spellCheck(AsyncChatEvent event) {
-        Component originalMessage = event.originalMessage();
-        if (!(originalMessage instanceof TextComponent textComponent)) {
+        Component message = event.message();
+        if (!(message instanceof TextComponent textComponent)) {
             return;
         }
 
