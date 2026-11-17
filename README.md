@@ -23,7 +23,7 @@ Features:
 
 ## Development
 1) Clone the repository
-2) Run `gradlew build` to build the project
+2) Run `./gradlew build` to build the project
 
 ## Contributing
 1) Fork the repository
