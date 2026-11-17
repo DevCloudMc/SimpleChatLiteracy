@@ -4,7 +4,9 @@ import io.papermc.paper.chat.ChatRenderer;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.plugin.RegisteredListener;
 import org.junit.jupiter.api.Test;
@@ -39,6 +41,41 @@ class ChatListenerTest {
         listener.onAsyncChat(event);
 
         assertEquals(Component.text("Привет мир.", NamedTextColor.RED), event.message());
+    }
+
+    @Test
+    void formatsStyledChildOfEmptyRoot() {
+        Component message = Component.empty().append(Component.text("привет мир", NamedTextColor.RED));
+        AsyncChatEvent event = chatEvent(message, message);
+
+        listener.onAsyncChat(event);
+
+        assertEquals("Привет мир.", PlainTextComponentSerializer.plainText().serialize(event.message()));
+        assertEquals(Component.empty().append(Component.text("Привет мир.", NamedTextColor.RED)), event.message());
+    }
+
+    @Test
+    void respectsPunctuationInStyledChild() {
+        Component punctuation = Component.text("!", NamedTextColor.RED);
+        Component message = Component.text("привет мир").append(punctuation);
+        AsyncChatEvent event = chatEvent(message, message);
+
+        listener.onAsyncChat(event);
+
+        assertEquals("Привет мир!", PlainTextComponentSerializer.plainText().serialize(event.message()));
+        assertEquals(Component.text("Привет мир").append(punctuation), event.message());
+    }
+
+    @Test
+    void editsDifferentNodesAndPreservesChildEvent() {
+        TextComponent child = Component.text("мир", NamedTextColor.RED).clickEvent(ClickEvent.runCommand("/example"));
+        Component message = Component.text("привет ").append(child);
+        AsyncChatEvent event = chatEvent(message, message);
+
+        listener.onAsyncChat(event);
+
+        assertEquals("Привет мир.", PlainTextComponentSerializer.plainText().serialize(event.message()));
+        assertEquals(Component.text("Привет ").append(child.content("мир.")), event.message());
     }
 
     @Test
